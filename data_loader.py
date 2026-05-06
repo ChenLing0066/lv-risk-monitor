@@ -30,7 +30,10 @@ class DataLoader:
         self.df["Volume"] = self.df["Vol."].apply(parse_volume)
 
         #convert percentage to decimal
-        self.df['Change'] = self.df['Change %'].apply(lambda x : float(x.replace('%',''))/100)
+        try:
+            self.df['Change'] = self.df['Change %'].apply(lambda x : float(x.replace('%',''))/100)
+        except Exception as e:
+            raise ValueError(f"Faild to parse Change % colunm: {e}")
 
         #sort by date ascending and reset index
         self.df = self.df.sort_values('Date').reset_index(drop=True)
