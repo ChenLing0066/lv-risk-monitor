@@ -43,7 +43,7 @@ class RiskAnalyzer:
             self.compute_volatility()
         
         self.df["Risk_Level"] = self.df["Volatility"].apply(
-            lambda v: "elevated" if (not pd.isnan(v) and v > self.risk_threshold) else "normal")
+            lambda v: "elevated" if (not pd.isna(v) and v > self.risk_threshold) else "normal")
         return self.df["Risk_Level"]
     
     def run_analysis(self):
