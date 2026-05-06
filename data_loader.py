@@ -25,13 +25,15 @@ class DataLoader:
                 return float(x.replace('K', '')) * 1_000
             elif x.endswith('M'):
                 return float(x.replace('M', '')) * 1_000_000
+            elif x.endswith('B'):
+                return float(x.replace('B', '')) * 1_000_000_000
             else:
                 return float(x)
         self.df["Volume"] = self.df["Vol."].apply(parse_volume)
 
         #convert percentage to decimal
         try:
-            self.df['Change'] = self.df['Change %'].apply(lambda x : float(x.replace('%',''))/100)
+            self.df['Change'] = self.df['Change %'].apply(lambda x : None if pd.isna(x) else float(str(x).replace('%','').strip())/100)
         except Exception as e:
             raise ValueError(f"Faild to parse Change % colunm: {e}")
 
