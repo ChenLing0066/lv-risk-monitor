@@ -70,6 +70,18 @@ class RiskAnalyzer:
             if row["Risk_Level"] == "elevated":
                 yield f"{row['Date'].date()} | Volatility: {row['Volatility']:.4f} | Elevated Risk Detected"
 
+    def get_summary(self):
+        """return a summary of results"""
+        if self.results is None:
+            self.run_analysis()
+        return {
+            "total_days" : len(self.results),
+            "high_risk_days" :len(self.get_high_risk_days()),
+            "max_drawdown" :self.compute_max_drawdown(),
+            "volatility_window" : self.volatility_window,
+            "risk_threshold" : self.risk_threshold
+        }
+
     def __str__(self):
         """return a summary of analysis"""
         return (f"RiskAnalyzer | Window: {self.volatility_window} days | Risk Threshold: {self.risk_threshold}\n")
