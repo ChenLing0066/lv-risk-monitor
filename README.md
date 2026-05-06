@@ -54,3 +54,11 @@ Open `main.ipynb` in VS Code or Jupyter and run all cells.
 ### 4. Run tests
 ```bash
 python -m pytest tests/test_project.py -v
+```
+
+## 5 Main Contributions
+
+| Member | Contributions |
+|--------|--------------|
+| Yihao He | DataLoader class, RiskAnalyzer class, main notebook, visualizations, test cases, README |
+| Zhihao Wu | |
