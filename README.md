@@ -40,7 +40,7 @@ final/
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/ChenLing0066/lv-risk-monitor.git
-cd lvmh-risk-monitor
+cd lv-risk-monitor
 ```
 
 ### 2. Install dependencies
