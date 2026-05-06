@@ -43,7 +43,7 @@ class RiskAnalyzer:
             self.compute_volatility()
         
         self.df["Risk_Level"] = self.df["Volatility"].apply(
-            lambda v: "elevated" if (not math.isnan(v) and v> self.risk_threshold) else "normal")
+            lambda v: "elevated" if (not pd.isnan(v) and v > self.risk_threshold) else "normal")
         return self.df["Risk_Level"]
     
     def run_analysis(self):
@@ -104,6 +104,9 @@ if __name__ == "__main__":
     print(f"First 5 high risk days: {high_risk[:5]}")
 
     print("\nFirst 3 risk signals:")
+    
+    from itertools import islice
+
     gen = analyzer.risk_signal_generator()
-    for _ in range(3):
-        print(next(gen))
+    for signal in islice(gen,3):
+        print(signal)
