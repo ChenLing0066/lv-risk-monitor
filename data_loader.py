@@ -27,6 +27,7 @@ class DataLoader:
                 return float(x.replace('M', '')) * 1_000_000
             else:
                 return float(x)
+        self.df["Volume"] = self.df["Vol."].apply(parse_volume)
 
         #convert percentage to decimal
         self.df['Change'] = self.df['Change %'].apply(lambda x : float(x.replace('%',''))/100)
