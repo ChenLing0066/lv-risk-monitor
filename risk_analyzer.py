@@ -95,6 +95,14 @@ def __init__(self, loader: DataLoader, volatility_window: int = 20, risk_thresho
         "risk_threshold" : self.risk_threshold
     }
 
+def export_results(self, output_path: str = "risk_analysis_results.csv"):
+    """Export the analysis results to a CSV file."""
+    if self.results is None:
+        self.run_analysis()
+
+    self.results.to_csv(output_path, index=False)
+    return output_path
+    
     def __str__(self):
         """return a summary of analysis"""
         return (f"RiskAnalyzer | Window: {self.volatility_window} days | Risk Threshold: {self.risk_threshold}\n")
