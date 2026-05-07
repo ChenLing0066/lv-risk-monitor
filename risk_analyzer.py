@@ -6,12 +6,18 @@ class RiskAnalyzer:
     """Analyze LVHM stock data to detect periods of market ris. 
     Uses DataLoader to access cleaned data"""
 
-    def __init__(self, loader: DataLoader, volatility_window: int = 20, risk_threshold: float = 0.015):
-        """Initialize the Analyzer"""
-        self.df = loader.get_data().copy()
-        self.volatility_window = volatility_window
-        self.risk_threshold = risk_threshold
-        self.results = None
+def __init__(self, loader: DataLoader, volatility_window: int = 20, risk_threshold: float = 0.015):
+    """Initialize the analyzer with cleaned stock data and risk settings."""
+    if volatility_window <= 0:
+        raise ValueError("volatility_window must be positive")
+
+    if risk_threshold <= 0:
+        raise ValueError("risk_threshold must be positive")
+
+    self.df = loader.get_data().copy()
+    self.volatility_window = volatility_window
+    self.risk_threshold = risk_threshold
+    self.results = None
 
     def compute_daily_returns(self):
         """compute daily returns for each trading day"""
