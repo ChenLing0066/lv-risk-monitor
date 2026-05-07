@@ -100,3 +100,15 @@ def test_invalid_risk_threshold(loader):
     """Test RiskAnalyzer raises an error for invalid risk threshold."""
     with pytest.raises(ValueError):
         RiskAnalyzer(loader, risk_threshold=0)
+
+def test_export_results_creates_file(analyzer, tmp_path):
+    """Test analysis results can be exported to a CSV file."""
+    output_file = tmp_path / "risk_analysis_results.csv"
+    returned_path = analyzer.export_results(str(output_file))
+
+    assert returned_path == str(output_file)
+    assert output_file.exists()
+
+    exported = pd.read_csv(output_file)
+    assert "Risk_Level" in exported.columns
+    assert len(exported) == len(analyzer.results)
