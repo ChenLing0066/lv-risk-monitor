@@ -61,4 +61,4 @@ python -m pytest tests/test_project.py -v
 | Member | Contributions |
 |--------|--------------|
 | Yihao He | DataLoader class, RiskAnalyzer class, main notebook, visualizations, test cases, README |
-| Zhihao Wu | |
+| Zhihao Wu | Improved project documentation, added risk summary output, added parameter validation, added exception-handling Pytest cases, added result export functionality, and verified that the notebook and tests run correctly. |
