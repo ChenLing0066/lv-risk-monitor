@@ -75,3 +75,40 @@ def test_analyzer_str(analyzer):
     """Test the __str__ returns a string contains window infor"""
     result = str(analyzer)
     assert "20" in result
+
+def test_summary_contains_high_risk_ratio(analyzer):
+    """Test summary includes the high risk ratio and percent."""
+    summary = analyzer.get_summary()
+    assert "high_risk_ratio" in summary
+    assert "high_risk_percent" in summary
+    assert 0 <= summary["high_risk_ratio"] <= 1
+
+
+def test_loader_invalid_file():
+    """Test DataLoader raises an error for a missing file."""
+    with pytest.raises(FileNotFoundError):
+        DataLoader("missing_file.csv")
+
+
+def test_invalid_volatility_window(loader):
+    """Test RiskAnalyzer raises an error for invalid volatility window."""
+    with pytest.raises(ValueError):
+        RiskAnalyzer(loader, volatility_window=0)
+
+
+def test_invalid_risk_threshold(loader):
+    """Test RiskAnalyzer raises an error for invalid risk threshold."""
+    with pytest.raises(ValueError):
+        RiskAnalyzer(loader, risk_threshold=0)
+
+def test_export_results_creates_file(analyzer, tmp_path):
+    """Test analysis results can be exported to a CSV file."""
+    output_file = tmp_path / "risk_analysis_results.csv"
+    returned_path = analyzer.export_results(str(output_file))
+
+    assert returned_path == str(output_file)
+    assert output_file.exists()
+
+    exported = pd.read_csv(output_file)
+    assert "Risk_Level" in exported.columns
+    assert len(exported) == len(analyzer.results)

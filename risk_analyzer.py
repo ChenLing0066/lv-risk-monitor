@@ -6,12 +6,18 @@ class RiskAnalyzer:
     """Analyze LVHM stock data to detect periods of market ris. 
     Uses DataLoader to access cleaned data"""
 
-    def __init__(self, loader: DataLoader, volatility_window: int = 20, risk_threshold: float = 0.015):
-        """Initialize the Analyzer"""
-        self.df = loader.get_data().copy()
-        self.volatility_window = volatility_window
-        self.risk_threshold = risk_threshold
-        self.results = None
+def __init__(self, loader: DataLoader, volatility_window: int = 20, risk_threshold: float = 0.015):
+    """Initialize the analyzer with cleaned stock data and risk settings."""
+    if volatility_window <= 0:
+        raise ValueError("volatility_window must be positive")
+
+    if risk_threshold <= 0:
+        raise ValueError("risk_threshold must be positive")
+
+    self.df = loader.get_data().copy()
+    self.volatility_window = volatility_window
+    self.risk_threshold = risk_threshold
+    self.results = None
 
     def compute_daily_returns(self):
         """compute daily returns for each trading day"""
@@ -71,17 +77,32 @@ class RiskAnalyzer:
                 yield f"{row['Date'].date()} | Volatility: {row['Volatility']:.4f} | Elevated Risk Detected"
 
     def get_summary(self):
-        """return a summary of results"""
-        if self.results is None:
-            self.run_analysis()
-        return {
-            "total_days" : len(self.results),
-            "high_risk_days" :len(self.get_high_risk_days()),
-            "max_drawdown" :self.compute_max_drawdown(),
-            "volatility_window" : self.volatility_window,
-            "risk_threshold" : self.risk_threshold
-        }
+    """return a summary of results"""
+    if self.results is None:
+        self.run_analysis()
 
+    total_days = len(self.results)
+    high_risk_days = len(self.get_high_risk_days())
+    high_risk_ratio = high_risk_days / total_days if total_days > 0 else math.nan
+
+    return {
+        "total_days" : total_days,
+        "high_risk_days" : high_risk_days,
+        "high_risk_ratio" : round(high_risk_ratio, 4),
+        "high_risk_percent" : round(high_risk_ratio * 100, 2),
+        "max_drawdown" :self.compute_max_drawdown(),
+        "volatility_window" : self.volatility_window,
+        "risk_threshold" : self.risk_threshold
+    }
+
+def export_results(self, output_path: str = "risk_analysis_results.csv"):
+    """Export the analysis results to a CSV file."""
+    if self.results is None:
+        self.run_analysis()
+
+    self.results.to_csv(output_path, index=False)
+    return output_path
+    
     def __str__(self):
         """return a summary of analysis"""
         return (f"RiskAnalyzer | Window: {self.volatility_window} days | Risk Threshold: {self.risk_threshold}\n")
